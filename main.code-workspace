@@ -11,7 +11,8 @@
 			"blocks.h": "c",
 			"stdio.h": "c",
 			"*.m": "c",
-			"constants.h": "c"
+			"constants.h": "c",
+			"raymath.h": "c"
 		}
 	}
 }

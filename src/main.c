@@ -1,8 +1,8 @@
 #include <math.h>
 #include <stdio.h>
-#include "raylib.h"
 
 #include "constants.h"
+#include "raylib.h"
 #include "spaceship.h"
 spaceship_t sship;
 //----------------------------------------------------------------------------------
@@ -19,13 +19,18 @@ int main() {
     //--------------------------------------------------------------------------------------
     const int screenWidth = SCREEN_WIDTH;
     const int screenHeight = SCREEN_HEIGHT;
-    sship=(spaceship_t){{screenWidth/2,screenHeight/2},{0,0}};
-    
 
     InitWindow(screenWidth, screenHeight, "raylib");
-    sship.icon=LoadTexture("resources/spaceship.png");
- 
-
+    sship.icon = LoadTexture("resources/spaceship.png");
+    sship = (spaceship_t){{screenWidth / 2 - sship.icon.width / 2, screenHeight / 2 - sship.icon.height / 2},
+                          {0, -10},
+                          sship.icon,
+                          0,sship.icon.width/4,sship.icon.height/4};
+    /*sship = (spaceship_t){{screenWidth / 2, screenHeight / 2},
+                          {0, -1},
+                          sship.icon,
+                          0};*/
+    sship.angle = 0;
     // DisableCursor();
 
     SetTargetFPS(60);  // Set our game to run at 60 frames-per-second
@@ -50,10 +55,12 @@ static void UpdateDrawFrame(void) {
     //----------------------------------------------------------------------------------
 
     BeginDrawing();
-    
     ClearBackground(RAYWHITE);
+
+    
     draw_spaceship(&sship);
-    DrawText(TextFormat("Velocita' max:%.2f", 2), 10, 60, 20, DARKGRAY);
+    DrawText(TextFormat("Angolo:%d", sship.angle), 10, 60, 20, DARKGRAY);
+    DrawText(TextFormat("Vettore:%f,%f", sship.vel.x, sship.vel.y), 10, 80, 20, DARKGRAY);
     DrawFPS(10, 10);
 
     EndDrawing();
