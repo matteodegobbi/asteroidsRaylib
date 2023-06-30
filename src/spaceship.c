@@ -1,8 +1,10 @@
 #include "spaceship.h"
+#include "projectile.h"
 
 #include "constants.h"
 #include "raylib.h"
 #include "raymath.h"
+
 
 void update_spaceship(spaceship_t* sship) {
     if (IsKeyDown(KEY_A)) {
@@ -25,6 +27,7 @@ void update_spaceship(spaceship_t* sship) {
 
     if (IsKeyPressed(KEY_SPACE)) {/*shoot*/
         /*add laser to array of entities to draw */
+        shoot_projectile(sship);
     }
 
     //---------------------------------------------------------------------------------------------
@@ -42,6 +45,11 @@ void update_spaceship(spaceship_t* sship) {
 
     sship->angle = sship->angle % 360;  // keep angles from 0 to 359
     //---------------------------------------------------------------------------------------------
+}
+void shoot_projectile(spaceship_t* sship){
+    sship->projectiles[sship->iLastProjectile].pos=sship->pos;
+    sship->projectiles[sship->iLastProjectile].distLeftToLive=INITIAL_DIST_TO_LIVE;
+    sship->iLastProjectile++;
 }
 void draw_spaceship(spaceship_t* sship) {
     Vector2 drawCenter = (Vector2){sship->width / 2, sship->height / 2};

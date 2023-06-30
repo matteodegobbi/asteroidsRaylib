@@ -4,7 +4,9 @@
 #include "constants.h"
 #include "raylib.h"
 #include "spaceship.h"
+#include "projectile.h"
 spaceship_t sship;
+
 //----------------------------------------------------------------------------------
 // Local Functions Declaration
 //----------------------------------------------------------------------------------
@@ -26,6 +28,7 @@ int main() {
                           {0, -10},
                           sship.icon,
                           0,sship.icon.width/4,sship.icon.height/4};
+    sship.iLastProjectile=0;
     /*sship = (spaceship_t){{screenWidth / 2, screenHeight / 2},
                           {0, -1},
                           sship.icon,
@@ -59,6 +62,7 @@ static void UpdateDrawFrame(void) {
 
     
     draw_spaceship(&sship);
+    draw_projectiles(sship.projectiles,sship.iLastProjectile);
     DrawText(TextFormat("Angolo:%d", sship.angle), 10, 60, 20, DARKGRAY);
     DrawText(TextFormat("Vettore:%f,%f", sship.vel.x, sship.vel.y), 10, 80, 20, DARKGRAY);
     DrawFPS(10, 10);
