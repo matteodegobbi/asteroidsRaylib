@@ -1,11 +1,23 @@
 #include "spaceship.h"
-#include "projectile.h"
+
+#include <assert.h>
 
 #include "constants.h"
+#include "projectile.h"
 #include "raylib.h"
 #include "raymath.h"
-
-
+void init_spaceship(spaceship_t* sship) {
+    sship->icon = LoadTexture("resources/spaceship.png");
+    *sship =
+        (spaceship_t){{SCREEN_WIDTH / 2 - sship->icon.width / 2, SCREEN_HEIGHT / 2 - sship->icon.height / 2},
+                      {0, -10},
+                      sship->icon,
+                      0,
+                      sship->icon.width / 4,
+                      sship->icon.height / 4};
+    sship->i_last_projectile= 0;
+    sship->size_projectile_arr=0;
+}
 void update_spaceship(spaceship_t* sship) {
     if (IsKeyDown(KEY_A)) {
         sship->vel = Vector2Rotate(sship->vel, -DEG2RAD * SPACESHIP_ANGULAR_SPEED);
@@ -25,7 +37,7 @@ void update_spaceship(spaceship_t* sship) {
         sship->pos = Vector2Subtract(sship->pos, sship->vel);
     }
 
-    if (IsKeyPressed(KEY_SPACE)) {/*shoot*/
+    if (IsKeyPressed(KEY_SPACE)) { /*shoot*/
         /*add laser to array of entities to draw */
         shoot_projectile(sship);
     }
@@ -46,10 +58,17 @@ void update_spaceship(spaceship_t* sship) {
     sship->angle = sship->angle % 360;  // keep angles from 0 to 359
     //---------------------------------------------------------------------------------------------
 }
-void shoot_projectile(spaceship_t* sship){
-    sship->projectiles[sship->iLastProjectile].pos=sship->pos;
-    sship->projectiles[sship->iLastProjectile].distLeftToLive=INITIAL_DIST_TO_LIVE;
-    sship->iLastProjectile++;
+void shoot_projectile(spaceship_t* sship) {
+    // check if queue is full
+    if (sship->size_projectile_arr == MAX_SPACESHIP_PROJECTILES) {
+        return;
+    }
+    assert(sship->i_last_projectile <= sship->size_projectile_arr);
+    sship->projectiles_arr[sship->i_last_projectile % MAX_SPACESHIP_PROJECTILES].pos = sship->pos;
+    sship->projectiles_arr[sship->i_last_projectile % MAX_SPACESHIP_PROJECTILES].dist_left_alive =
+        INITIAL_DIST_TO_LIVE;
+    sship->i_last_projectile++;
+    sship->size_projectile_arr++;
 }
 void draw_spaceship(spaceship_t* sship) {
     Vector2 drawCenter = (Vector2){sship->width / 2, sship->height / 2};

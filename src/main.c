@@ -23,17 +23,7 @@ int main() {
     const int screenHeight = SCREEN_HEIGHT;
 
     InitWindow(screenWidth, screenHeight, "raylib");
-    sship.icon = LoadTexture("resources/spaceship.png");
-    sship = (spaceship_t){{screenWidth / 2 - sship.icon.width / 2, screenHeight / 2 - sship.icon.height / 2},
-                          {0, -10},
-                          sship.icon,
-                          0,sship.icon.width/4,sship.icon.height/4};
-    sship.iLastProjectile=0;
-    /*sship = (spaceship_t){{screenWidth / 2, screenHeight / 2},
-                          {0, -1},
-                          sship.icon,
-                          0};*/
-    sship.angle = 0;
+    init_spaceship(&sship);
     // DisableCursor();
 
     SetTargetFPS(60);  // Set our game to run at 60 frames-per-second
@@ -62,7 +52,7 @@ static void UpdateDrawFrame(void) {
 
     
     draw_spaceship(&sship);
-    draw_projectiles(sship.projectiles,sship.iLastProjectile);
+    draw_projectiles(sship.projectiles_arr,sship.i_last_projectile);
     DrawText(TextFormat("Angolo:%d", sship.angle), 10, 60, 20, DARKGRAY);
     DrawText(TextFormat("Vettore:%f,%f", sship.vel.x, sship.vel.y), 10, 80, 20, DARKGRAY);
     DrawFPS(10, 10);
