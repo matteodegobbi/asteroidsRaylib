@@ -1,7 +1,8 @@
 #pragma once
 
-#include "raylib.h"
 #include <stddef.h>
+
+#include "raylib.h"
 
 #define INITIAL_DIST_TO_LIVE 1000
 
@@ -11,5 +12,7 @@ typedef struct projectile_t {
     float dist_left_alive;
 
 } projectile_t;
-void draw_projectiles(projectile_t arr[], size_t arr_length);
 
+void update_projectiles(const projectile_t arr[], size_t size,size_t first);
+
+void draw_projectiles(const projectile_t arr[], size_t size, size_t first);

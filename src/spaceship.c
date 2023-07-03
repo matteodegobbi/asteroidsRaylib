@@ -15,8 +15,8 @@ void init_spaceship(spaceship_t* sship) {
                       0,
                       sship->icon.width / 4,
                       sship->icon.height / 4};
-    sship->i_last_projectile= 0;
-    sship->size_projectile_arr=0;
+    sship->i_first_projectile = 0;
+    sship->size_projectile_arr = 0;
 }
 void update_spaceship(spaceship_t* sship) {
     if (IsKeyDown(KEY_A)) {
@@ -37,9 +37,12 @@ void update_spaceship(spaceship_t* sship) {
         sship->pos = Vector2Subtract(sship->pos, sship->vel);
     }
 
-    if (IsKeyPressed(KEY_SPACE)) { /*shoot*/
-        /*add laser to array of entities to draw */
+    if (IsKeyDown(KEY_SPACE)) { /*shoot*/
+        /*adds laser to array of entities to draw */
         shoot_projectile(sship);
+    }
+    if (IsKeyDown(KEY_TAB)) { /*deshoot solo per il debug*/
+       unshoot_oldest_projectile(sship);
     }
 
     //---------------------------------------------------------------------------------------------
@@ -63,12 +66,18 @@ void shoot_projectile(spaceship_t* sship) {
     if (sship->size_projectile_arr == MAX_SPACESHIP_PROJECTILES) {
         return;
     }
-    assert(sship->i_last_projectile <= sship->size_projectile_arr);
-    sship->projectiles_arr[sship->i_last_projectile % MAX_SPACESHIP_PROJECTILES].pos = sship->pos;
-    sship->projectiles_arr[sship->i_last_projectile % MAX_SPACESHIP_PROJECTILES].dist_left_alive =
+    assert(sship->i_first_projectile <= sship->size_projectile_arr);
+    sship->projectiles_arr[sship->size_projectile_arr % MAX_SPACESHIP_PROJECTILES].pos = sship->pos;
+    sship->projectiles_arr[sship->size_projectile_arr % MAX_SPACESHIP_PROJECTILES].dist_left_alive =
         INITIAL_DIST_TO_LIVE;
-    sship->i_last_projectile++;
     sship->size_projectile_arr++;
+}
+void unshoot_oldest_projectile(spaceship_t* sship) {/*DEBUG GOD MODE*/
+    if (sship->size_projectile_arr == 0) {
+        return;
+    }
+    sship->i_first_projectile = (sship->i_first_projectile + 1) % sship->size_projectile_arr;
+    sship->size_projectile_arr--;
 }
 void draw_spaceship(spaceship_t* sship) {
     Vector2 drawCenter = (Vector2){sship->width / 2, sship->height / 2};
