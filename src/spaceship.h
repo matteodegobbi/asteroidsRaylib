@@ -12,11 +12,10 @@ typedef struct spaceship_t {
     int angle;
     float width;
     float height;
-    projectile_t projectiles_arr[MAX_SPACESHIP_PROJECTILES];//FIFO circular queue
-    size_t i_first_projectile;
-    size_t size_projectile_arr;
+    queue_proj_t projectiles;    
 } spaceship_t;
 void init_spaceship(spaceship_t* sship);
 void update_spaceship(spaceship_t* sship);
 void draw_spaceship(spaceship_t* sship);
 void shoot_projectile(spaceship_t* sship);
+void unshoot_oldest_projectile(spaceship_t* sship);

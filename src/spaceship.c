@@ -15,8 +15,8 @@ void init_spaceship(spaceship_t* sship) {
                       0,
                       sship->icon.width / 4,
                       sship->icon.height / 4};
-    sship->i_first_projectile = 0;
-    sship->size_projectile_arr = 0;
+    sship->projectiles.i_first_projectile=0;
+    sship->projectiles.size_projectile_arr=0;
 }
 void update_spaceship(spaceship_t* sship) {
     if (IsKeyDown(KEY_A)) {
@@ -62,22 +62,10 @@ void update_spaceship(spaceship_t* sship) {
     //---------------------------------------------------------------------------------------------
 }
 void shoot_projectile(spaceship_t* sship) {
-    // check if queue is full
-    if (sship->size_projectile_arr == MAX_SPACESHIP_PROJECTILES) {
-        return;
-    }
-    assert(sship->i_first_projectile <= sship->size_projectile_arr);
-    sship->projectiles_arr[sship->size_projectile_arr % MAX_SPACESHIP_PROJECTILES].pos = sship->pos;
-    sship->projectiles_arr[sship->size_projectile_arr % MAX_SPACESHIP_PROJECTILES].dist_left_alive =
-        INITIAL_DIST_TO_LIVE;
-    sship->size_projectile_arr++;
+   enqueue_projectile(&(sship->projectiles),sship->pos); 
 }
 void unshoot_oldest_projectile(spaceship_t* sship) {/*DEBUG GOD MODE*/
-    if (sship->size_projectile_arr == 0) {
-        return;
-    }
-    sship->i_first_projectile = (sship->i_first_projectile + 1) % sship->size_projectile_arr;
-    sship->size_projectile_arr--;
+   dequeue_projectile(&(sship->projectiles)); 
 }
 void draw_spaceship(spaceship_t* sship) {
     Vector2 drawCenter = (Vector2){sship->width / 2, sship->height / 2};

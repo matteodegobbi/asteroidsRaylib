@@ -52,8 +52,8 @@ static void UpdateDrawFrame(void) {
 
     
     draw_spaceship(&sship);
-    draw_projectiles(sship.projectiles_arr,sship.size_projectile_arr,sship.i_first_projectile);
-    
+    draw_projectiles(sship.projectiles.projectiles_arr,sship.projectiles.size_projectile_arr,sship.projectiles.i_first_projectile);
+
     DrawText(TextFormat("Angolo:%d", sship.angle), 10, 60, 20, DARKGRAY);
     DrawText(TextFormat("Vettore:%f,%f", sship.vel.x, sship.vel.y), 10, 80, 20, DARKGRAY);
     DrawFPS(10, 10);
