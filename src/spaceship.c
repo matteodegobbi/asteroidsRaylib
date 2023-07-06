@@ -5,7 +5,7 @@
 #include "constants.h"
 #include "projectile.h"
 #include "raylib.h"
-#include "raymath.h"
+
 void init_spaceship(spaceship_t* sship) {
     sship->icon = LoadTexture("resources/spaceship.png");
     *sship =
@@ -62,7 +62,8 @@ void update_spaceship(spaceship_t* sship) {
     //---------------------------------------------------------------------------------------------
 }
 void shoot_projectile(spaceship_t* sship) {
-   enqueue_projectile(&(sship->projectiles),sship->pos); 
+    /*TODO ADD MODIFIER FOR FASTER PROJECTILES*/
+    enqueue_projectile(&(sship->projectiles),sship->pos,sship->vel); 
 }
 void unshoot_oldest_projectile(spaceship_t* sship) {/*DEBUG GOD MODE*/
    dequeue_projectile(&(sship->projectiles)); 

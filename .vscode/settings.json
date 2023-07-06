@@ -11,6 +11,7 @@
 	"files.associations": {
 		"stdio.h": "c",
 		"palla.h": "c",
-		"constants.h": "c"
+		"constants.h": "c",
+		"raymath.h": "c"
 	}
 }
