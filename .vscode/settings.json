@@ -12,6 +12,8 @@
 		"stdio.h": "c",
 		"palla.h": "c",
 		"constants.h": "c",
-		"raymath.h": "c"
+		"raymath.h": "c",
+		"raylib.h": "c",
+		"spaceship.h": "c"
 	}
 }

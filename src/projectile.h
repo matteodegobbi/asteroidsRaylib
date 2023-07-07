@@ -2,7 +2,8 @@
 #include <stddef.h>
 
 #include "constants.h"
-
+#include "raylib.h"
+#include "raymath.h"
 
 #define INITIAL_DIST_TO_LIVE 1000
 

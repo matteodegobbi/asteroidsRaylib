@@ -17,6 +17,7 @@ static void UpdateDrawFrame(void);  // Update and draw one frame
 //----------------------------------------------------------------------------------
 
 int main() {
+    
     // Initialization
     //--------------------------------------------------------------------------------------
     const int screenWidth = SCREEN_WIDTH;
@@ -43,7 +44,10 @@ int main() {
 // Update and draw game frame
 static void UpdateDrawFrame(void) {
     // Update
+    queue_proj_t* proj=&sship.projectiles;
+    update_projectiles(proj->projectiles_arr,proj->size_projectile_arr,proj->i_first_projectile);
     update_spaceship(&sship);
+    
     // Draw
     //----------------------------------------------------------------------------------
 

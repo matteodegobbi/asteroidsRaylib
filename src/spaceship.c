@@ -1,10 +1,13 @@
 #include "spaceship.h"
 
 #include <assert.h>
+#include <math.h>
 
 #include "constants.h"
 #include "projectile.h"
+
 #include "raylib.h"
+#include "raymath.h"
 
 void init_spaceship(spaceship_t* sship) {
     sship->icon = LoadTexture("resources/spaceship.png");
@@ -44,7 +47,11 @@ void update_spaceship(spaceship_t* sship) {
     if (IsKeyDown(KEY_TAB)) { /*deshoot solo per il debug*/
        unshoot_oldest_projectile(sship);
     }
-
+    if (IsKeyPressed(KEY_HOME))
+    {
+        printf("ciao\n");
+    }
+    
     //---------------------------------------------------------------------------------------------
     // makes spaceship reenter from the opposite side of where it exited
     sship->pos.y = fmod(sship->pos.y + sship->height / 2, SCREEN_HEIGHT + sship->height) -
