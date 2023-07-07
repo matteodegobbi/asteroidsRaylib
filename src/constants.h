@@ -8,5 +8,11 @@
 //---------------------------------
 //-----------Spaceship-------------
 //---------------------------------
-#define MAX_SPACESHIP_PROJECTILES 100
-#define SPACESHIP_ANGULAR_SPEED 3.0f
+#define MAX_SPACESHIP_PROJECTILES 50
+#define SPACESHIP_ANGULAR_SPEED 4.0f
+//---------------------------------
+//-----------Projectile------------
+//---------------------------------
+#define PROJECTILE_Y_SPEED -15
+#define PROJECTILE_X_SPEED 0 
+#define PROJECTILE_SIZE 20.0f

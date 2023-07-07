@@ -40,7 +40,7 @@ void update_spaceship(spaceship_t* sship) {
         sship->pos = Vector2Subtract(sship->pos, sship->vel);
     }
 
-    if (IsKeyDown(KEY_SPACE)) { /*shoot*/
+    if (IsKeyPressed(KEY_SPACE) || IsMouseButtonDown(0)) { /*shoot*/
         /*adds laser to array of entities to draw */
         shoot_projectile(sship);
     }
@@ -49,7 +49,8 @@ void update_spaceship(spaceship_t* sship) {
     }
     if (IsKeyPressed(KEY_HOME))
     {
-        printf("ciao\n");
+        //NOTHING
+        printf("\n");
     }
     
     //---------------------------------------------------------------------------------------------
@@ -70,7 +71,10 @@ void update_spaceship(spaceship_t* sship) {
 }
 void shoot_projectile(spaceship_t* sship) {
     /*TODO ADD MODIFIER FOR FASTER PROJECTILES*/
-    enqueue_projectile(&(sship->projectiles),sship->pos,sship->vel); 
+    //COMMENTED VERSION HAS INERTIA FROM SHIP
+    //enqueue_projectile(&(sship->projectiles),sship->pos,sship->vel); 
+    Vector2 proj_vel= Vector2Rotate((Vector2){PROJECTILE_X_SPEED,PROJECTILE_Y_SPEED}, DEG2RAD * sship->angle);
+    enqueue_projectile(&(sship->projectiles),sship->pos,proj_vel); 
 }
 void unshoot_oldest_projectile(spaceship_t* sship) {/*DEBUG GOD MODE*/
    dequeue_projectile(&(sship->projectiles)); 

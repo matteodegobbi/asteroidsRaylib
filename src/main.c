@@ -45,7 +45,7 @@ int main() {
 static void UpdateDrawFrame(void) {
     // Update
     queue_proj_t* proj=&sship.projectiles;
-    update_projectiles(proj->projectiles_arr,proj->size_projectile_arr,proj->i_first_projectile);
+    update_projectiles(proj);
     update_spaceship(&sship);
     
     // Draw
