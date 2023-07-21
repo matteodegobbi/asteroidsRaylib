@@ -2,6 +2,7 @@
 
 #include <assert.h>
 #include <math.h>
+#include <stdio.h>
 
 #include "constants.h"
 #include "projectile.h"

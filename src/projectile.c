@@ -3,6 +3,7 @@
 
 #include <assert.h>
 #include <stdio.h>
+#include <stdint.h>
 
 #include "spaceship.h"
 void update_projectiles(queue_proj_t* queue) {
@@ -48,7 +49,11 @@ void enqueue_projectile(queue_proj_t* queue, Vector2 initial_pos, Vector2 vel) {
     queue->projectiles_arr[index_new_proj].pos = initial_pos;
     queue->projectiles_arr[index_new_proj].dist_left_alive = INITIAL_DIST_TO_LIVE;
     queue->projectiles_arr[index_new_proj].vel = vel;
-    queue->projectiles_arr[index_new_proj].color=GetColor((unsigned int)GetRandomValue(0,0xFFFFFF));//RANDOM COLOR
+    const int max_brightness=0xF0; 
+    queue->projectiles_arr[index_new_proj].color.r=GetRandomValue(0,max_brightness);//RANDOM COLOR
+    queue->projectiles_arr[index_new_proj].color.g=GetRandomValue(0,max_brightness);//RANDOM COLOR
+    queue->projectiles_arr[index_new_proj].color.b=GetRandomValue(0,max_brightness);//RANDOM COLOR
+    queue->projectiles_arr[index_new_proj].color.a=GetRandomValue(0,max_brightness);//RANDOM COLOR
     queue->size_projectile_arr++;
 }
 

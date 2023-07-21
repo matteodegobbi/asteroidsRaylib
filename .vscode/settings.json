@@ -15,6 +15,7 @@
 		"raymath.h": "c",
 		"raylib.h": "c",
 		"spaceship.h": "c",
-		"type_traits": "c"
+		"type_traits": "c",
+		"*.m": "c"
 	}
 }
