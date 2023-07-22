@@ -8,6 +8,7 @@
 #include "spaceship.h"
 spaceship_t sship;
 extern asteroid_t asteroids[];
+extern size_t n_asteroids;
 
 //----------------------------------------------------------------------------------
 // Local Functions Declaration
@@ -26,12 +27,12 @@ int main() {
 
     InitWindow(screenWidth, screenHeight, "raylib");
     init_spaceship(&sship);
-    for (size_t i = 0; i < 4; i++) {
+    for (size_t i = 0; i < n_asteroids; i++) {
         init_rand_asteroid(&asteroids[i]);
     }
 
     // DisableCursor();
-
+ 
     SetTargetFPS(60);  // Set our game to run at 60 frames-per-second
 
     // Main game loop
@@ -52,6 +53,9 @@ static void UpdateDrawFrame(void) {
     queue_proj_t* proj = &sship.projectiles;
     update_projectiles(proj);
     update_spaceship(&sship);
+    for (size_t i = 0; i < n_asteroids; i++) {
+        update_asteroid(&asteroids[i]);
+    }
 
     // Draw
     //----------------------------------------------------------------------------------
@@ -67,7 +71,7 @@ static void UpdateDrawFrame(void) {
     // DrawText(TextFormat("Vettore:%f,%f", sship.vel.x, sship.vel.y), 10, 80, 20, DARKGRAY);
     DrawFPS(10, 10);
 
-    for (size_t i = 0; i < 4; i++) {
+    for (size_t i = 0; i < n_asteroids; i++) {
         draw_asteroid(&asteroids[i]);
     }
     EndDrawing();

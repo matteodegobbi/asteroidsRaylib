@@ -16,6 +16,7 @@
 		"raylib.h": "c",
 		"spaceship.h": "c",
 		"type_traits": "c",
-		"*.m": "c"
+		"*.m": "c",
+		"asteroid.h": "c"
 	}
 }

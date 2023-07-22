@@ -21,3 +21,6 @@
 //---------------------------------
 #define MAX_ASTEROIDS 30
 #define INITIAL_ASTEROIDS 5
+#define ASTEROID_N_SIDES 8
+#define MAX_ASTEROID_DIREC_SPEED 8
+#define ASTEROID_ROTATION_SPEED 0.05f
