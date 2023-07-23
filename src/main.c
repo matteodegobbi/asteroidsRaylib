@@ -7,13 +7,13 @@
 #include "raylib.h"
 #include "spaceship.h"
 spaceship_t sship;
-extern asteroid_t asteroids[];
-extern size_t n_asteroids;
+asteroid_t asteroids[MAX_ASTEROIDS];
+size_t n_asteroids = 12;
 
 //----------------------------------------------------------------------------------
 // Local Functions Declaration
 //----------------------------------------------------------------------------------
-static void UpdateDrawFrame(void);  // Update and draw one frame
+static void UpdateDrawFrame(float);  // Update and draw one frame
 
 //----------------------------------------------------------------------------------
 // Main entry point
@@ -32,13 +32,14 @@ int main() {
     }
 
     // DisableCursor();
- 
-    SetTargetFPS(60);  // Set our game to run at 60 frames-per-second
 
+    SetTargetFPS(144);  // Set our game to run at 60 frames-per-second
+    //TODO LA  NAVICELLA SPARA PIU VELOCEMNTE CON FPS PIU ALTI
     // Main game loop
     while (!WindowShouldClose())  // Detect window close button or ESC key
     {
-        UpdateDrawFrame();
+        double delta_time = GetFrameTime();
+        UpdateDrawFrame(delta_time);
     }
 
     // De-Initialization
@@ -48,13 +49,18 @@ int main() {
     return 0;
 }
 // Update and draw game frame
-static void UpdateDrawFrame(void) {
+static void UpdateDrawFrame(float delta_time) {
     // Update
     queue_proj_t* proj = &sship.projectiles;
-    update_projectiles(proj);
-    update_spaceship(&sship);
+
+    update_spaceship(&sship,delta_time);
+    collision_projectiles_asteroids(asteroids, n_asteroids, sship.projectiles.projectiles_arr,
+                                    sship.projectiles.size_projectile_arr,
+                                    sship.projectiles.i_first_projectile);
+
+    update_projectiles(proj,delta_time);
     for (size_t i = 0; i < n_asteroids; i++) {
-        update_asteroid(&asteroids[i]);
+        update_asteroid(&asteroids[i],delta_time);
     }
 
     // Draw
@@ -67,8 +73,8 @@ static void UpdateDrawFrame(void) {
     draw_projectiles(sship.projectiles.projectiles_arr, sship.projectiles.size_projectile_arr,
                      sship.projectiles.i_first_projectile);
 
-    // DrawText(TextFormat("Angolo:%d", sship.angle), 10, 60, 20, DARKGRAY);
-    // DrawText(TextFormat("Vettore:%f,%f", sship.vel.x, sship.vel.y), 10, 80, 20, DARKGRAY);
+    //DrawText(TextFormat("Angolo:%f", sship.angle), 10, 60, 20, DARKGRAY);
+    //DrawText(TextFormat("Vettore:%f,%f", sship.vel.x, sship.vel.y), 10, 80, 20, DARKGRAY);
     DrawFPS(10, 10);
 
     for (size_t i = 0; i < n_asteroids; i++) {

@@ -17,6 +17,8 @@
 		"spaceship.h": "c",
 		"type_traits": "c",
 		"*.m": "c",
-		"asteroid.h": "c"
+		"asteroid.h": "c",
+		"algorithm": "c",
+		"stddef.h": "c"
 	}
 }
