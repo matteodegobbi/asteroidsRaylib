@@ -8,7 +8,7 @@
 #include "spaceship.h"
 spaceship_t sship;
 asteroid_t asteroids[MAX_ASTEROIDS];
-size_t n_asteroids = 12;
+//size_t n_asteroids;
 // #define QUADRATO_DEBUG  // TODO RIMUOVI QUANDO HAI FINITO
 
 //----------------------------------------------------------------------------------
@@ -25,11 +25,16 @@ int main() {
     //--------------------------------------------------------------------------------------
     const int screenWidth = SCREEN_WIDTH;
     const int screenHeight = SCREEN_HEIGHT;
-
     InitWindow(screenWidth, screenHeight, "raylib");
+
+    //n_asteroids = INITIAL_ASTEROIDS;
     init_spaceship(&sship);
-    for (size_t i = 0; i < n_asteroids; i++) {
-        init_rand_asteroid(&asteroids[i]);
+    for (size_t i = 0; i < MAX_ASTEROIDS; i++) {
+        if (i % N_BLOCK_OF_ASTEROID_FAMILY) {
+            init_rand_asteroid(&asteroids[i]);
+        } else {
+            asteroids[i].hit = true;
+        }
     }
 
     // DisableCursor();
@@ -37,8 +42,7 @@ int main() {
     SetTargetFPS(144);  // Set our game to run at 60 frames-per-second
     // TODO LA  NAVICELLA SPARA PIU VELOCEMNTE CON FPS PIU ALTI
     //  Main game loop
-    while (!WindowShouldClose())  // Detect window close button or ESC key
-    {
+    while (!WindowShouldClose()) {  // Detect window close button or ESC key
         double delta_time = GetFrameTime();
         UpdateDrawFrame(delta_time);
     }
@@ -55,15 +59,12 @@ static void UpdateDrawFrame(float delta_time) {
     queue_proj_t* proj = &sship.projectiles;
 
     update_spaceship(&sship, delta_time);
-    collision_projectiles_asteroids(asteroids, n_asteroids, sship.projectiles.projectiles_arr,
+    collision_projectiles_asteroids(asteroids, MAX_ASTEROIDS, sship.projectiles.projectiles_arr,
                                     sship.projectiles.size_projectile_arr,
                                     sship.projectiles.i_first_projectile);
 
     update_projectiles(proj, delta_time);
-    for (size_t i = 0; i < n_asteroids; i++) {
-        update_asteroid(&asteroids[i], delta_time);
-    }
-
+    update_asteroids(asteroids, MAX_ASTEROIDS, delta_time);
     // Draw
     //----------------------------------------------------------------------------------
 
@@ -74,10 +75,8 @@ static void UpdateDrawFrame(float delta_time) {
     draw_projectiles(sship.projectiles.projectiles_arr, sship.projectiles.size_projectile_arr,
                      sship.projectiles.i_first_projectile);
 
-    
-
 #ifdef QUADRATO_DEBUG
-Color hitquadrato = GREEN;
+    Color hitquadrato = GREEN;
 #define n_lati 7
     const Vector2 vertices_quadrato[n_lati] = {(Vector2){200, 200}, (Vector2){200, 800}, (Vector2){800, 800},
                                                (Vector2){800, 200}, (Vector2){500, 300}, (Vector2){300, 150},
@@ -94,10 +93,7 @@ Color hitquadrato = GREEN;
     // DrawText(TextFormat("Angolo:%f", sship.angle), 10, 60, 20, DARKGRAY);
     // DrawText(TextFormat("Vettore:%f,%f", sship.vel.x, sship.vel.y), 10, 80, 20, DARKGRAY);
     DrawFPS(10, 10);
-
-    for (size_t i = 0; i < n_asteroids; i++) {
-        draw_asteroid(&asteroids[i]);
-    }
+    draw_asteroids(asteroids, MAX_ASTEROIDS);
     EndDrawing();
     //----------------------------------------------------------------------------------
 }
