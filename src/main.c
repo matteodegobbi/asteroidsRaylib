@@ -9,6 +9,7 @@
 spaceship_t sship;
 asteroid_t asteroids[MAX_ASTEROIDS];
 size_t n_asteroids = 12;
+// #define QUADRATO_DEBUG  // TODO RIMUOVI QUANDO HAI FINITO
 
 //----------------------------------------------------------------------------------
 // Local Functions Declaration
@@ -34,8 +35,8 @@ int main() {
     // DisableCursor();
 
     SetTargetFPS(144);  // Set our game to run at 60 frames-per-second
-    //TODO LA  NAVICELLA SPARA PIU VELOCEMNTE CON FPS PIU ALTI
-    // Main game loop
+    // TODO LA  NAVICELLA SPARA PIU VELOCEMNTE CON FPS PIU ALTI
+    //  Main game loop
     while (!WindowShouldClose())  // Detect window close button or ESC key
     {
         double delta_time = GetFrameTime();
@@ -53,14 +54,14 @@ static void UpdateDrawFrame(float delta_time) {
     // Update
     queue_proj_t* proj = &sship.projectiles;
 
-    update_spaceship(&sship,delta_time);
+    update_spaceship(&sship, delta_time);
     collision_projectiles_asteroids(asteroids, n_asteroids, sship.projectiles.projectiles_arr,
                                     sship.projectiles.size_projectile_arr,
                                     sship.projectiles.i_first_projectile);
 
-    update_projectiles(proj,delta_time);
+    update_projectiles(proj, delta_time);
     for (size_t i = 0; i < n_asteroids; i++) {
-        update_asteroid(&asteroids[i],delta_time);
+        update_asteroid(&asteroids[i], delta_time);
     }
 
     // Draw
@@ -73,8 +74,25 @@ static void UpdateDrawFrame(float delta_time) {
     draw_projectiles(sship.projectiles.projectiles_arr, sship.projectiles.size_projectile_arr,
                      sship.projectiles.i_first_projectile);
 
-    //DrawText(TextFormat("Angolo:%f", sship.angle), 10, 60, 20, DARKGRAY);
-    //DrawText(TextFormat("Vettore:%f,%f", sship.vel.x, sship.vel.y), 10, 80, 20, DARKGRAY);
+    
+
+#ifdef QUADRATO_DEBUG
+Color hitquadrato = GREEN;
+#define n_lati 7
+    const Vector2 vertices_quadrato[n_lati] = {(Vector2){200, 200}, (Vector2){200, 800}, (Vector2){800, 800},
+                                               (Vector2){800, 200}, (Vector2){500, 300}, (Vector2){300, 150},
+                                               (Vector2){200, 200}};
+    if (CheckCollisionPointPoly(sship.pos, vertices_quadrato, n_lati)) {
+        hitquadrato = RED;
+    }
+
+    for (size_t i = 0; i < n_lati; a++) {
+        DrawLineV(vertices_quadrato[i], vertices_quadrato[(i + 1) % n_lati], hitquadrato);
+    }
+
+#endif
+    // DrawText(TextFormat("Angolo:%f", sship.angle), 10, 60, 20, DARKGRAY);
+    // DrawText(TextFormat("Vettore:%f,%f", sship.vel.x, sship.vel.y), 10, 80, 20, DARKGRAY);
     DrawFPS(10, 10);
 
     for (size_t i = 0; i < n_asteroids; i++) {

@@ -8,7 +8,7 @@
 //---------------------------------
 //-----------Spaceship-------------
 //---------------------------------
-#define MAX_SPACESHIP_PROJECTILES 100
+#define MAX_SPACESHIP_PROJECTILES 500
 #define SPACESHIP_ANGULAR_SPEED 210.0f
 #define SPACESHIP_DIREC_SPEED -500
 //---------------------------------

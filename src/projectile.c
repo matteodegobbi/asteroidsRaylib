@@ -56,7 +56,7 @@ void enqueue_projectile(queue_proj_t* queue, Vector2 initial_pos, Vector2 vel) {
     queue->projectiles_arr[index_new_proj].color.r=GetRandomValue(0,max_brightness);//RANDOM COLOR
     queue->projectiles_arr[index_new_proj].color.g=GetRandomValue(0,max_brightness);//RANDOM COLOR
     queue->projectiles_arr[index_new_proj].color.b=GetRandomValue(0,max_brightness);//RANDOM COLOR
-    queue->projectiles_arr[index_new_proj].color.a=GetRandomValue(0,max_brightness);//RANDOM COLOR
+    queue->projectiles_arr[index_new_proj].color.a=GetRandomValue(max_brightness/3*2,max_brightness);//RANDOM ALFA
     queue->size_projectile_arr++;
 }
 

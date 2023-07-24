@@ -20,17 +20,20 @@ void init_spaceship(spaceship_t* sship) {
                       sship->icon.height / 4};
     sship->projectiles.i_first_projectile = 0;
     sship->projectiles.size_projectile_arr = 0;
+    for (size_t i = 0; i < MAX_SPACESHIP_PROJECTILES; i++) {
+        sship->projectiles.projectiles_arr[i].flag=-1;
+    }
 }
 void update_spaceship(spaceship_t* sship, float delta_time) {
     if (IsKeyDown(KEY_A)) {
-        double delta_angle = delta_time*SPACESHIP_ANGULAR_SPEED;
-        sship->vel = Vector2Rotate(sship->vel, -delta_angle* DEG2RAD);
+        double delta_angle = delta_time * SPACESHIP_ANGULAR_SPEED;
+        sship->vel = Vector2Rotate(sship->vel, -delta_angle * DEG2RAD);
         sship->angle -= delta_angle;
     }
 
     if (IsKeyDown(KEY_D)) {
-        double delta_angle = delta_time*SPACESHIP_ANGULAR_SPEED;
-        sship->vel = Vector2Rotate(sship->vel, delta_angle*DEG2RAD  );
+        double delta_angle = delta_time * SPACESHIP_ANGULAR_SPEED;
+        sship->vel = Vector2Rotate(sship->vel, delta_angle * DEG2RAD);
         sship->angle += delta_angle;
     }
 
@@ -67,7 +70,7 @@ void update_spaceship(spaceship_t* sship, float delta_time) {
         sship->pos.x = SCREEN_WIDTH + sship->height / 2;
     }
 
-    sship->angle = fmod(sship->angle,360.0f);  // keep angles from 0 to 359
+    sship->angle = fmod(sship->angle, 360.0f);  // keep angles from 0 to 359
     //---------------------------------------------------------------------------------------------
 }
 void shoot_projectile(spaceship_t* sship) {
