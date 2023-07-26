@@ -13,7 +13,7 @@ typedef struct asteroid_t {
     asteroid_scale scale;
     Color color;
     float angle;
-    bool hit;
+    int flag;
 } asteroid_t;
 
 asteroid_scale int2scale(int i);

@@ -50,7 +50,7 @@ void enqueue_projectile(queue_proj_t* queue, Vector2 initial_pos, Vector2 vel) {
     queue->projectiles_arr[index_new_proj].pos = initial_pos;
     queue->projectiles_arr[index_new_proj].dist_left_alive = INITIAL_DIST_TO_LIVE;
     queue->projectiles_arr[index_new_proj].vel = vel;
-    queue->projectiles_arr[index_new_proj].flag= 0;
+    queue->projectiles_arr[index_new_proj].flag= FLAG_SHOOTING;
     
     const int max_brightness=0xF0; 
     queue->projectiles_arr[index_new_proj].color.r=GetRandomValue(0,max_brightness);//RANDOM COLOR
@@ -66,7 +66,7 @@ void dequeue_projectile(queue_proj_t* queue) {
         return;
     }
     //TODO TOGLI STA ROBA SE NON SERVE
-    queue->projectiles_arr[queue->i_first_projectile % MAX_SPACESHIP_PROJECTILES].flag=-70;
+    queue->projectiles_arr[queue->i_first_projectile % MAX_SPACESHIP_PROJECTILES].flag=FLAG_DEQUEUED;
     queue->i_first_projectile = (queue->i_first_projectile + 1) % MAX_SPACESHIP_PROJECTILES;
     queue->size_projectile_arr--;
 }

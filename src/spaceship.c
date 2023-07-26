@@ -21,7 +21,7 @@ void init_spaceship(spaceship_t* sship) {
     sship->projectiles.i_first_projectile = 0;
     sship->projectiles.size_projectile_arr = 0;
     for (size_t i = 0; i < MAX_SPACESHIP_PROJECTILES; i++) {
-        sship->projectiles.projectiles_arr[i].flag=-1;
+        sship->projectiles.projectiles_arr[i].flag=FLAG_UNINITIALIZED;
     }
 }
 void update_spaceship(spaceship_t* sship, float delta_time) {

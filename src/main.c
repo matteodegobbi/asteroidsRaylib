@@ -30,10 +30,10 @@ int main() {
     //n_asteroids = INITIAL_ASTEROIDS;
     init_spaceship(&sship);
     for (size_t i = 0; i < MAX_ASTEROIDS; i++) {
-        if (i % N_BLOCK_OF_ASTEROID_FAMILY) {
+        if ( i % N_BLOCK_OF_ASTEROID_FAMILY==0) {
             init_rand_asteroid(&asteroids[i]);
         } else {
-            asteroids[i].hit = true;
+            asteroids[i].flag = ASTFLAG_UNINITIALIZED;
         }
     }
 

@@ -38,28 +38,30 @@ int scale2int(asteroid_scale scale) {
 void init_rand_asteroid(asteroid_t* ast) {
     ast->color = GRAY;
     ast->pos = (Vector2){GetRandomValue(0, SCREEN_WIDTH), GetRandomValue(0, SCREEN_HEIGHT)};
-    ast->scale = int2scale(GetRandomValue(0, N_SCALES_ASTEROID));
+    ast->scale = int2scale(GetRandomValue(0, N_SCALES_ASTEROID - 1));
+    // ast->shape_type=1;
     ast->shape_type = GetRandomValue(0, sizeof(asteroid_shapes) / sizeof(asteroid_shapes[0]) - 1);
     ast->vel =
         (Vector2){GetRandomValue(0, MAX_ASTEROID_DIREC_SPEED),
                   GetRandomValue(0, MAX_ASTEROID_DIREC_SPEED)};  // TODO DA CAMBIARE CON VELOCITA PIU SENSATE
     ast->angle = GetRandomValue(0, 360);
-    ast->hit = false;
+    ast->flag = ASTFLAG_ALIVE;
 }
 void init_rand_asteroid_scale_pos(asteroid_t* ast, asteroid_scale scale, Vector2 pos) {
     ast->color = GRAY;
     ast->pos = pos;
     ast->scale = scale;
+    // ast->shape_type=1;
     ast->shape_type = GetRandomValue(0, sizeof(asteroid_shapes) / sizeof(asteroid_shapes[0]) - 1);
     ast->vel =
         (Vector2){GetRandomValue(0, MAX_ASTEROID_DIREC_SPEED),
                   GetRandomValue(0, MAX_ASTEROID_DIREC_SPEED)};  // TODO DA CAMBIARE CON VELOCITA PIU SENSATE
     ast->angle = GetRandomValue(0, 360);
-    ast->hit = false;
+    ast->flag = ASTFLAG_ALIVE;
 }
 
 void update_asteroid(asteroid_t* ast, float delta_time) {
-    if (ast->hit) {
+    if (ast->flag != ASTFLAG_ALIVE) {
         return;
     }
     float diameter = 5.0f;  // TODO CAMBIA GENERICO CON COSTANTS.H
@@ -85,8 +87,8 @@ void update_asteroid(asteroid_t* ast, float delta_time) {
 
 void collision_projectiles_asteroids(asteroid_t asts[], size_t len_ast, projectile_t projs[], size_t n_proj,
                                      size_t i_first_proj) {
-    for (size_t i = 0; i < len_ast; i++) {
-        if (asts[i].hit) {
+    for (size_t i = 0; i < len_ast; i++) {  //&& IsKeyPressed(KEY_CAPS_LOCK)
+        if (asts[i].flag != ASTFLAG_ALIVE) {
             continue;
         }
 
@@ -97,24 +99,39 @@ void collision_projectiles_asteroids(asteroid_t asts[], size_t len_ast, projecti
                                         asts[i].scale),
                            asts[i].pos);
         }
-        ast_vertices[ASTEROID_N_SIDES] = ast_vertices[0];
+        ast_vertices[ASTEROID_N_SIDES] = ast_vertices[0];  // To use CheckCollisionPointPoly properly
+
         for (size_t j = 0; j < n_proj; j++) {  // CURRENT ASTEROID AGAINST EVERY PROJECTILE
             // controllo di non stare usando un proiettili dequeued TODO togli sta roba di assert
             // assert(projs[(j + i_first_proj) % MAX_SPACESHIP_PROJECTILES].flag == 0);
-            if (CheckCollisionPointPoly(projs[(j + i_first_proj) % MAX_SPACESHIP_PROJECTILES].pos,
+
+            //  &&(projs[(j + i_first_proj) % MAX_SPACESHIP_PROJECTILES].flag == FLAG_SHOOTING) &&
+            //  asts[i].flag == ASTFLAG_ALIVE &&
+            if ((projs[(j + i_first_proj) % MAX_SPACESHIP_PROJECTILES].flag == FLAG_SHOOTING) &&
+                CheckCollisionPointPoly(projs[(j + i_first_proj) % MAX_SPACESHIP_PROJECTILES].pos,
                                         ast_vertices, ASTEROID_N_SIDES + 1)) {
                 // asts[i].color = RED;
-                asts[i].hit = true;
+                asts[i].flag = ASTFLAG_DESTROYED;
+                projs[(j + i_first_proj) % MAX_SPACESHIP_PROJECTILES].flag = FLAG_HIT;
                 // asts[i].scale = 0;
                 //  projs[(j+i_first_proj)%n_proj].vel=(Vector2){0,0};
-                //  projs[(j + i_first_proj) % MAX_SPACESHIP_PROJECTILES].color = BLACK;
-                int index_current_scale = scale2int(asts[i].scale);
-                asteroid_scale children_scale = int2scale(index_current_scale-1);
-                if (asts[i].scale!=SMALL) {
-                    init_rand_asteroid_scale_pos(&asts[i], children_scale, (Vector2){100.0f,100.0f});
-                    /*init_rand_asteroid_scale_pos(&asts[i + X_POW_OF_2(index_current_scale - 1)],
-                                                 children_scale,
-                                                 asts[i + X_POW_OF_2(index_current_scale - 1)].pos);
+                projs[(j + i_first_proj) % MAX_SPACESHIP_PROJECTILES].color = WHITE;
+                if (asts[i].scale != SMALL) {
+                    int index_current_scale = scale2int(asts[i].scale);
+                    asteroid_scale children_scale = int2scale(index_current_scale - 1);
+                    Vector2 current_pos = asts[i].pos;
+                    init_rand_asteroid_scale_pos(
+                        &asts[i], children_scale,
+                        Vector2Add(current_pos,
+                                   (Vector2){GetRandomValue(-100, 100), GetRandomValue(-100, 100)}));
+                    /*init_rand_asteroid_scale_pos(
+                        &asts[i + index_current_scale], children_scale,
+                        Vector2Add(current_pos,
+                                   (Vector2){GetRandomValue(-100, 100), GetRandomValue(-100, 100)}));*/
+                    init_rand_asteroid_scale_pos(
+                        &asts[i + X_POW_OF_2(index_current_scale - 1)], children_scale,
+                        Vector2Add(current_pos,
+                                   (Vector2){GetRandomValue(-100, 100), GetRandomValue(-100, 100)}));
                 }
 
                 break;
@@ -124,7 +141,7 @@ void collision_projectiles_asteroids(asteroid_t asts[], size_t len_ast, projecti
 }
 
 void draw_asteroid(asteroid_t* ast) {
-    if (ast->hit) {
+    if (ast->flag != ASTFLAG_ALIVE) {
         return;
     }
     float scale = ast->scale;
