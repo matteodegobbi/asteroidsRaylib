@@ -90,8 +90,9 @@ static void UpdateDrawFrame(float delta_time) {
     }
 
 #endif
-    // DrawText(TextFormat("Angolo:%f", sship.angle), 10, 60, 20, DARKGRAY);
+     DrawText(TextFormat("Angolo:%f", sship.angle), 10, 60, 20, DARKGRAY);
     // DrawText(TextFormat("Vettore:%f,%f", sship.vel.x, sship.vel.y), 10, 80, 20, DARKGRAY);
+    DrawText(TextFormat("Vettore:%f,%f", sship.pos.x, sship.pos.y), 10, 80, 20, DARKGRAY);
     DrawFPS(10, 10);
     draw_asteroids(asteroids, MAX_ASTEROIDS);
     EndDrawing();

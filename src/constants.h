@@ -14,7 +14,7 @@
 //---------------------------------
 //-----------Projectile------------
 //---------------------------------
-#define PROJECTILE_Y_SPEED -550
+#define PROJECTILE_Y_SPEED -1100
 #define PROJECTILE_X_SPEED 0
 #define PROJECTILE_SIZE 5.0f
 #define FLAG_SHOOTING 0
@@ -46,3 +46,8 @@ typedef enum {
 // all its children, children of children etc...
 #define N_BLOCK_OF_ASTEROID_FAMILY X_POW_OF_2(N_SCALES_ASTEROID - 1)
 #define MAX_ASTEROIDS (N_BLOCK_OF_ASTEROID_FAMILY * INITIAL_ASTEROIDS)
+//---------------------------------
+//-----------Controller------------
+//---------------------------------
+#define DEAD_ZONE 0.3f
+#define GAMEPAD 0

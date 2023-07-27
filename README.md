@@ -11,4 +11,4 @@
 7. High Score in a csv file
 8. Change controls with txt file and controls menu
 9. Maybe change movement
-10. Add contoller support
+10. ~~Add contoller support~~

@@ -21,10 +21,12 @@ void init_spaceship(spaceship_t* sship) {
     sship->projectiles.i_first_projectile = 0;
     sship->projectiles.size_projectile_arr = 0;
     for (size_t i = 0; i < MAX_SPACESHIP_PROJECTILES; i++) {
-        sship->projectiles.projectiles_arr[i].flag=FLAG_UNINITIALIZED;
+        sship->projectiles.projectiles_arr[i].flag = FLAG_UNINITIALIZED;
     }
 }
 void update_spaceship(spaceship_t* sship, float delta_time) {
+    //---------------------------------------------------------------------------------------------
+    // KEYBOARD AND MOUSE
     if (IsKeyDown(KEY_A)) {
         double delta_angle = delta_time * SPACESHIP_ANGULAR_SPEED;
         sship->vel = Vector2Rotate(sship->vel, -delta_angle * DEG2RAD);
@@ -49,6 +51,7 @@ void update_spaceship(spaceship_t* sship, float delta_time) {
         /*adds laser to array of entities to draw */
         shoot_projectile(sship);
     }
+
     if (IsKeyDown(KEY_TAB)) { /*deshoot solo per il debug*/
         unshoot_oldest_projectile(sship);
     }
@@ -56,6 +59,25 @@ void update_spaceship(spaceship_t* sship, float delta_time) {
         // NOTHING
         printf("\n");
     }
+    //---------------------------------------------------------------------------------------------
+    // GAMEPAD
+    if (IsGamepadButtonPressed(GAMEPAD, GAMEPAD_BUTTON_RIGHT_FACE_DOWN) ||
+        IsGamepadButtonDown(GAMEPAD, GAMEPAD_BUTTON_RIGHT_FACE_RIGHT)) { /*shoot*/
+        /*adds laser to array of entities to draw */
+        shoot_projectile(sship);
+    }
+
+    float axisX = GetGamepadAxisMovement(GAMEPAD, GAMEPAD_AXIS_LEFT_X);
+    float axisY = GetGamepadAxisMovement(GAMEPAD, GAMEPAD_AXIS_LEFT_Y);
+    Vector2 axis = (Vector2){axisX, axisY};
+    float normAxis = Vector2Length(axis);
+    if (normAxis >= DEAD_ZONE) {
+        sship->angle = (atan2f(axisY, axisX)) * RAD2DEG + 90;
+        sship->vel = Vector2Rotate((Vector2){0, SPACESHIP_DIREC_SPEED}, sship->angle * DEG2RAD);
+        sship->pos = Vector2Add(sship->pos, Vector2Scale(sship->vel, normAxis * delta_time));
+    }
+
+    // DrawCircleV(Vector2Add((Vector2){SCREEN_WIDTH/2,SCREEN_HEIGHT/2},Vector2Scale(axis,100)),20.0f,RED);
 
     //---------------------------------------------------------------------------------------------
     // makes spaceship reenter from the opposite side of where it exited
@@ -79,7 +101,8 @@ void shoot_projectile(spaceship_t* sship) {
     // enqueue_projectile(&(sship->projectiles),sship->pos,sship->vel);
     Vector2 proj_vel =
         Vector2Rotate((Vector2){PROJECTILE_X_SPEED, PROJECTILE_Y_SPEED}, DEG2RAD * sship->angle);
-    enqueue_projectile(&(sship->projectiles), sship->pos, proj_vel);
+    Vector2 relative_pos = Vector2Scale(Vector2Normalize(sship->vel),sship->height/2);
+    enqueue_projectile(&(sship->projectiles), Vector2Add(sship->pos,relative_pos), proj_vel);
 }
 void unshoot_oldest_projectile(spaceship_t* sship) { /*DEBUG GOD MODE*/
     dequeue_projectile(&(sship->projectiles));

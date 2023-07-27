@@ -5,7 +5,7 @@
 #include "raylib.h"
 #include "raymath.h"
 
-#define INITIAL_DIST_TO_LIVE 600
+#define INITIAL_DIST_TO_LIVE 1100
 
 typedef struct projectile_t {
     Vector2 pos;
