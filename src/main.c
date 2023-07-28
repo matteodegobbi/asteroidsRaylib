@@ -7,9 +7,11 @@
 #include "raylib.h"
 #include "spaceship.h"
 spaceship_t sship;
-asteroid_t asteroids[MAX_ASTEROIDS];
-//size_t n_asteroids;
-// #define QUADRATO_DEBUG  // TODO RIMUOVI QUANDO HAI FINITO
+asteroid_t asteroids[MAX_ASTEROIDS*5];
+size_t n_asteroids_alive;
+unsigned int current_level;
+// size_t n_asteroids;
+//  #define QUADRATO_DEBUG  // TODO RIMUOVI QUANDO HAI FINITO
 
 //----------------------------------------------------------------------------------
 // Local Functions Declaration
@@ -27,10 +29,12 @@ int main() {
     const int screenHeight = SCREEN_HEIGHT;
     InitWindow(screenWidth, screenHeight, "raylib");
 
-    //n_asteroids = INITIAL_ASTEROIDS;
+    n_asteroids_alive = INITIAL_ASTEROIDS;
+    current_level = 1;
+
     init_spaceship(&sship);
     for (size_t i = 0; i < MAX_ASTEROIDS; i++) {
-        if ( i % N_BLOCK_OF_ASTEROID_FAMILY==0) {
+        if (i % N_BLOCK_OF_ASTEROID_FAMILY == 0) {
             init_rand_asteroid(&asteroids[i]);
         } else {
             asteroids[i].flag = ASTFLAG_UNINITIALIZED;
@@ -45,6 +49,17 @@ int main() {
     while (!WindowShouldClose()) {  // Detect window close button or ESC key
         double delta_time = GetFrameTime();
         UpdateDrawFrame(delta_time);
+        if (n_asteroids_alive == 0) {
+            current_level++;
+            for (size_t i = 0; i < MAX_ASTEROIDS; i++) {
+                if (i % N_BLOCK_OF_ASTEROID_FAMILY == 0) {
+                    init_rand_asteroid(&asteroids[i]);
+                } else {
+                    asteroids[i].flag = ASTFLAG_UNINITIALIZED;
+                }
+            }
+            n_asteroids_alive=INITIAL_ASTEROIDS;
+        }
     }
 
     // De-Initialization
@@ -61,7 +76,7 @@ static void UpdateDrawFrame(float delta_time) {
     update_spaceship(&sship, delta_time);
     collision_projectiles_asteroids(asteroids, MAX_ASTEROIDS, sship.projectiles.projectiles_arr,
                                     sship.projectiles.size_projectile_arr,
-                                    sship.projectiles.i_first_projectile);
+                                    sship.projectiles.i_first_projectile, &n_asteroids_alive);
 
     update_projectiles(proj, delta_time);
     update_asteroids(asteroids, MAX_ASTEROIDS, delta_time);
@@ -75,25 +90,16 @@ static void UpdateDrawFrame(float delta_time) {
     draw_projectiles(sship.projectiles.projectiles_arr, sship.projectiles.size_projectile_arr,
                      sship.projectiles.i_first_projectile);
 
-#ifdef QUADRATO_DEBUG
-    Color hitquadrato = GREEN;
-#define n_lati 7
-    const Vector2 vertices_quadrato[n_lati] = {(Vector2){200, 200}, (Vector2){200, 800}, (Vector2){800, 800},
-                                               (Vector2){800, 200}, (Vector2){500, 300}, (Vector2){300, 150},
-                                               (Vector2){200, 200}};
-    if (CheckCollisionPointPoly(sship.pos, vertices_quadrato, n_lati)) {
-        hitquadrato = RED;
-    }
+    // DrawText(TextFormat("Angolo:%f", sship.angle), 10, 60, 20, DARKGRAY);
+    //  DrawText(TextFormat("Vettore:%f,%f", sship.vel.x, sship.vel.y), 10, 80, 20, DARKGRAY);
+    // DrawText(TextFormat("Vettore:%f,%f", sship.pos.x, sship.pos.y), 10, 80, 20, DARKGRAY);
+     DrawText(TextFormat("Number of asteroids:%d", n_asteroids_alive), 10, 100, 20, DARKGRAY);
+    char* level_string = TextFormat("Level %d", current_level);
+    const int level_font = 60;
+    DrawText(level_string, SCREEN_WIDTH / 2 - MeasureText(level_string, level_font) / 2, 20, level_font,
+             GREEN);
 
-    for (size_t i = 0; i < n_lati; a++) {
-        DrawLineV(vertices_quadrato[i], vertices_quadrato[(i + 1) % n_lati], hitquadrato);
-    }
-
-#endif
-     DrawText(TextFormat("Angolo:%f", sship.angle), 10, 60, 20, DARKGRAY);
-    // DrawText(TextFormat("Vettore:%f,%f", sship.vel.x, sship.vel.y), 10, 80, 20, DARKGRAY);
-    DrawText(TextFormat("Vettore:%f,%f", sship.pos.x, sship.pos.y), 10, 80, 20, DARKGRAY);
-    DrawFPS(10, 10);
+    // DrawFPS(10, 10);
     draw_asteroids(asteroids, MAX_ASTEROIDS);
     EndDrawing();
     //----------------------------------------------------------------------------------

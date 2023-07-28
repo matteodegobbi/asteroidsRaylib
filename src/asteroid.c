@@ -86,7 +86,7 @@ void update_asteroid(asteroid_t* ast, float delta_time) {
 }
 
 void collision_projectiles_asteroids(asteroid_t asts[], size_t len_ast, projectile_t projs[], size_t n_proj,
-                                     size_t i_first_proj) {
+                                     size_t i_first_proj, size_t* n_asteroids_alive_pt) {
     for (size_t i = 0; i < len_ast; i++) {  //&& IsKeyPressed(KEY_CAPS_LOCK)
         if (asts[i].flag != ASTFLAG_ALIVE) {
             continue;
@@ -111,15 +111,18 @@ void collision_projectiles_asteroids(asteroid_t asts[], size_t len_ast, projecti
                 CheckCollisionPointPoly(projs[(j + i_first_proj) % MAX_SPACESHIP_PROJECTILES].pos,
                                         ast_vertices, ASTEROID_N_SIDES + 1)) {
                 // asts[i].color = RED;
+
                 asts[i].flag = ASTFLAG_DESTROYED;
                 projs[(j + i_first_proj) % MAX_SPACESHIP_PROJECTILES].flag = FLAG_HIT;
                 // asts[i].scale = 0;
                 //  projs[(j+i_first_proj)%n_proj].vel=(Vector2){0,0};
                 projs[(j + i_first_proj) % MAX_SPACESHIP_PROJECTILES].color = WHITE;
+                *n_asteroids_alive_pt = *n_asteroids_alive_pt - 1;
                 if (asts[i].scale != SMALL) {
                     int index_current_scale = scale2int(asts[i].scale);
                     asteroid_scale children_scale = int2scale(index_current_scale - 1);
                     Vector2 current_pos = asts[i].pos;
+                    *n_asteroids_alive_pt = *n_asteroids_alive_pt + N_CHILDREN_ASTEROID;
                     init_rand_asteroid_scale_pos(
                         &asts[i], children_scale,
                         Vector2Add(current_pos,
@@ -133,6 +136,7 @@ void collision_projectiles_asteroids(asteroid_t asts[], size_t len_ast, projecti
                         Vector2Add(current_pos,
                                    (Vector2){GetRandomValue(-100, 100), GetRandomValue(-100, 100)}));
                 }
+                
 
                 break;
             }

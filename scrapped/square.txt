@@ -1,0 +1,15 @@
+#ifdef QUADRATO_DEBUG
+    Color hitquadrato = GREEN;
+#define n_lati 7
+    const Vector2 vertices_quadrato[n_lati] = {(Vector2){200, 200}, (Vector2){200, 800}, (Vector2){800, 800},
+                                               (Vector2){800, 200}, (Vector2){500, 300}, (Vector2){300, 150},
+                                               (Vector2){200, 200}};
+    if (CheckCollisionPointPoly(sship.pos, vertices_quadrato, n_lati)) {
+        hitquadrato = RED;
+    }
+
+    for (size_t i = 0; i < n_lati; a++) {
+        DrawLineV(vertices_quadrato[i], vertices_quadrato[(i + 1) % n_lati], hitquadrato);
+    }
+
+#endif

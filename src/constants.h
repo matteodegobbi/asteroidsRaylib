@@ -32,7 +32,7 @@ typedef enum {
 } asteroid_scale;  // IF YOU CHANGE THIS CHANGE PREVIOUS DEFINE and scale2int/int2scale
 #define INVALID_SCALE -1
 
-#define INITIAL_ASTEROIDS 18
+#define INITIAL_ASTEROIDS 2
 #define ASTEROID_N_SIDES 8
 #define MAX_ASTEROID_DIREC_SPEED 300
 #define ASTEROID_ROTATION_SPEED 10.0f
