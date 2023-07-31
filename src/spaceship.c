@@ -20,6 +20,7 @@ void init_spaceship(spaceship_t* sship) {
                       sship->icon.height / 4};
     sship->projectiles.i_first_projectile = 0;
     sship->projectiles.size_projectile_arr = 0;
+    sship->invincible = false;
     for (size_t i = 0; i < MAX_SPACESHIP_PROJECTILES; i++) {
         sship->projectiles.projectiles_arr[i].flag = FLAG_UNINITIALIZED;
     }
@@ -69,6 +70,8 @@ void update_spaceship(spaceship_t* sship, float delta_time) {
 
     float axisX = GetGamepadAxisMovement(GAMEPAD, GAMEPAD_AXIS_LEFT_X);
     float axisY = GetGamepadAxisMovement(GAMEPAD, GAMEPAD_AXIS_LEFT_Y);
+    axisX = (axisX >= 0 ? 1 : -1) * pow(axisX, 2);
+    axisY = (axisY >= 0 ? 1 : -1) * pow(axisY, 2);
     Vector2 axis = (Vector2){axisX, axisY};
     float normAxis = Vector2Length(axis);
     if (normAxis >= DEAD_ZONE) {
@@ -101,13 +104,17 @@ void shoot_projectile(spaceship_t* sship) {
     // enqueue_projectile(&(sship->projectiles),sship->pos,sship->vel);
     Vector2 proj_vel =
         Vector2Rotate((Vector2){PROJECTILE_X_SPEED, PROJECTILE_Y_SPEED}, DEG2RAD * sship->angle);
-    Vector2 relative_pos = Vector2Scale(Vector2Normalize(sship->vel),sship->height/2);
-    enqueue_projectile(&(sship->projectiles), Vector2Add(sship->pos,relative_pos), proj_vel);
+    Vector2 relative_pos = Vector2Scale(Vector2Normalize(sship->vel), sship->height / 2);
+    enqueue_projectile(&(sship->projectiles), Vector2Add(sship->pos, relative_pos), proj_vel);
 }
 void unshoot_oldest_projectile(spaceship_t* sship) { /*DEBUG GOD MODE*/
     dequeue_projectile(&(sship->projectiles));
 }
 void draw_spaceship(spaceship_t* sship) {
+    if (sship->invincible) {
+        DrawCircleV(sship->pos, sship->height * 1.2f, SKYBLUE);
+    }
+
     Vector2 drawCenter = (Vector2){sship->width / 2, sship->height / 2};
     Rectangle source = (Rectangle){0, 0, sship->icon.width, sship->icon.height};
     Rectangle destination = (Rectangle){sship->pos.x, sship->pos.y, sship->width, sship->height};

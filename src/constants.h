@@ -11,10 +11,11 @@
 #define MAX_SPACESHIP_PROJECTILES 500
 #define SPACESHIP_ANGULAR_SPEED 210.0f
 #define SPACESHIP_DIREC_SPEED -500
+#define SECONDS_INVINCIBILITY 3
 //---------------------------------
 //-----------Projectile------------
 //---------------------------------
-#define PROJECTILE_Y_SPEED -1100
+#define PROJECTILE_Y_SPEED -1500
 #define PROJECTILE_X_SPEED 0
 #define PROJECTILE_SIZE 5.0f
 #define FLAG_SHOOTING 0
@@ -26,9 +27,9 @@
 //---------------------------------
 #define N_SCALES_ASTEROID 3  // NEEDS TO BE CHANGED IF THE NEXT DEFINE IS CHANGED
 typedef enum {
-    SMALL = 2,
-    MEDIUM = 5,
-    BIG = 8
+    SMALL = 3,
+    MEDIUM = 6,
+    BIG = 10
 } asteroid_scale;  // IF YOU CHANGE THIS CHANGE PREVIOUS DEFINE and scale2int/int2scale
 #define INVALID_SCALE -1
 
@@ -49,5 +50,5 @@ typedef enum {
 //---------------------------------
 //-----------Controller------------
 //---------------------------------
-#define DEAD_ZONE 0.3f
+#define DEAD_ZONE 0.1f
 #define GAMEPAD 0

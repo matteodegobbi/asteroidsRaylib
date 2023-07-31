@@ -12,6 +12,7 @@ typedef struct spaceship_t {
     float width;
     float height;
     queue_proj_t projectiles;    
+    bool invincible;
 } spaceship_t;
 void init_spaceship(spaceship_t* sship);
 void update_spaceship(spaceship_t* sship,float delta_time);

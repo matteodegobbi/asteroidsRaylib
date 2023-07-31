@@ -2,11 +2,11 @@
 #include "projectile.h"
 
 #include <assert.h>
-#include <stdio.h>
 #include <stdint.h>
+#include <stdio.h>
 
 #include "spaceship.h"
-void update_projectiles(queue_proj_t* queue,float delta_time) {
+void update_projectiles(queue_proj_t* queue, float delta_time) {
     size_t first = queue->i_first_projectile;
     size_t size = queue->size_projectile_arr;
     for (size_t i = first; i < first + size; i++) {
@@ -14,8 +14,9 @@ void update_projectiles(queue_proj_t* queue,float delta_time) {
         if (current.dist_left_alive <= 0) {
             dequeue_projectile(queue);
         } else {
-            Vector2 effective_vel = Vector2Scale(current.vel,delta_time);
-            queue->projectiles_arr[i % MAX_SPACESHIP_PROJECTILES].pos = Vector2Add(current.pos, effective_vel);
+            Vector2 effective_vel = Vector2Scale(current.vel, delta_time);
+            queue->projectiles_arr[i % MAX_SPACESHIP_PROJECTILES].pos =
+                Vector2Add(current.pos, effective_vel);
             queue->projectiles_arr[i % MAX_SPACESHIP_PROJECTILES].dist_left_alive -=
                 Vector2Length(effective_vel);
         }
@@ -35,8 +36,10 @@ void update_projectiles(queue_proj_t* queue,float delta_time) {
 
 void draw_projectiles(const projectile_t arr[], size_t size, size_t first) {
     for (size_t i = first; i < first + size; i++) {
-        DrawCircle(arr[i % MAX_SPACESHIP_PROJECTILES].pos.x, arr[i % MAX_SPACESHIP_PROJECTILES].pos.y,
-                   PROJECTILE_SIZE, arr[i%MAX_SPACESHIP_PROJECTILES].color);
+        if (arr[i % MAX_SPACESHIP_PROJECTILES].flag != FLAG_HIT) {
+            DrawCircle(arr[i % MAX_SPACESHIP_PROJECTILES].pos.x, arr[i % MAX_SPACESHIP_PROJECTILES].pos.y,
+                       PROJECTILE_SIZE, arr[i % MAX_SPACESHIP_PROJECTILES].color);
+        }
     }
 }
 
@@ -50,13 +53,15 @@ void enqueue_projectile(queue_proj_t* queue, Vector2 initial_pos, Vector2 vel) {
     queue->projectiles_arr[index_new_proj].pos = initial_pos;
     queue->projectiles_arr[index_new_proj].dist_left_alive = INITIAL_DIST_TO_LIVE;
     queue->projectiles_arr[index_new_proj].vel = vel;
-    queue->projectiles_arr[index_new_proj].flag= FLAG_SHOOTING;
-    
-    const int max_brightness=0xF0; 
-    queue->projectiles_arr[index_new_proj].color.r=GetRandomValue(0,max_brightness);//RANDOM COLOR
-    queue->projectiles_arr[index_new_proj].color.g=GetRandomValue(0,max_brightness);//RANDOM COLOR
-    queue->projectiles_arr[index_new_proj].color.b=GetRandomValue(0,max_brightness);//RANDOM COLOR
-    queue->projectiles_arr[index_new_proj].color.a=GetRandomValue(max_brightness/3*2,max_brightness);//RANDOM ALFA
+    queue->projectiles_arr[index_new_proj].flag = FLAG_SHOOTING;
+
+    /*const int max_brightness = 0xF0;
+    queue->projectiles_arr[index_new_proj].color.r = GetRandomValue(0, max_brightness);  // RANDOM COLOR
+    queue->projectiles_arr[index_new_proj].color.g = GetRandomValue(0, max_brightness);  // RANDOM COLOR
+    queue->projectiles_arr[index_new_proj].color.b = GetRandomValue(0, max_brightness);  // RANDOM COLOR
+    queue->projectiles_arr[index_new_proj].color.a =
+        GetRandomValue(max_brightness / 3 * 2, max_brightness);  // RANDOM ALFA*/
+    queue->projectiles_arr[index_new_proj].color = BLACK;
     queue->size_projectile_arr++;
 }
 
@@ -65,8 +70,8 @@ void dequeue_projectile(queue_proj_t* queue) {
     if (queue->size_projectile_arr == 0) {
         return;
     }
-    //TODO TOGLI STA ROBA SE NON SERVE
-    queue->projectiles_arr[queue->i_first_projectile % MAX_SPACESHIP_PROJECTILES].flag=FLAG_DEQUEUED;
+    // TODO TOGLI STA ROBA SE NON SERVE
+    queue->projectiles_arr[queue->i_first_projectile % MAX_SPACESHIP_PROJECTILES].flag = FLAG_DEQUEUED;
     queue->i_first_projectile = (queue->i_first_projectile + 1) % MAX_SPACESHIP_PROJECTILES;
     queue->size_projectile_arr--;
 }
