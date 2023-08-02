@@ -18,7 +18,7 @@
                 "args": [
                     "RAYLIB_PATH=C:/raylib/raylib",
                     "PROJECT_NAME=${fileBasenameNoExtension}",
-                    "OBJS=src/${fileBasenameNoExtension}.c src/spaceship.c src/projectile.c src/asteroid.c",
+                    "OBJS=src/${fileBasenameNoExtension}.c src/spaceship.c src/projectile.c src/asteroid.c src/particle.c",
                     "BUILD_MODE=DEBUG"
                 ],
             },

@@ -3,6 +3,7 @@
 #include "asteroid.h"
 #include "constants.h"
 #include "projectile.h"
+#include "particle.h"
 #include "raylib.h"
 #include "raymath.h"
 
@@ -20,8 +21,9 @@ asteroid_scale int2scale(int i);
 void init_rand_asteroid(asteroid_t* ast);
 void init_rand_asteroid_scale_pos(asteroid_t* ast, asteroid_scale scale, Vector2 pos);
 void update_asteroid(asteroid_t* ast, float delta_time);
-void collision_projectiles_asteroids(asteroid_t asteroids[], size_t n_ast, projectile_t projectiles[],
-                                     size_t n_proj, size_t i_first_proj,size_t* n_asteroids_alive_pt);
+bool collision_projectiles_asteroids(asteroid_t asteroids[], size_t n_ast, projectile_t projectiles[],
+                                     size_t n_proj, size_t i_first_proj, size_t* n_asteroids_alive_pt,
+                                     particle_t particles[], size_t particles_len);
 void draw_asteroid(asteroid_t* ast);
 
 void update_asteroids(asteroid_t asteroids[], size_t len, float delta_time);

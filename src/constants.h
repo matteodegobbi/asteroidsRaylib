@@ -5,6 +5,7 @@
 #define SCREEN_WIDTH 1200
 #define SCREEN_HEIGHT 1000
 #define X_POW_OF_2(x) (1 << (x))
+#define SQRT_OF_2 1.41421356237309504880
 //---------------------------------
 //-----------Spaceship-------------
 //---------------------------------
@@ -52,3 +53,15 @@ typedef enum {
 //---------------------------------
 #define DEAD_ZONE 0.1f
 #define GAMEPAD 0
+//---------------------------------
+//------------Particles------------
+//---------------------------------
+#define N_PARTICLES_ASTEROID 1000
+#define PARTICLE_TIME_TO_LIVE 2
+#define PARTICLE_DIST_TO_LIVE 5000
+#define PARTICLE_RADIUS_MIN 0.1f
+#define PARTICLE_RADIUS_MAX 5.0f
+#define PARTICLE_MAX_DIRECTIONAL_SPEED 100
+#define PARTICLE_MAX_SPEED (SQRT_OF_2*PARTICLE_MAX_DIRECTIONAL_SPEED)
+#define EXPLOSION_MIN_RADIUS_PERCENT 0.1f
+#define EXPLOSION_MAX_RADIUS_PERCENT 1.0f

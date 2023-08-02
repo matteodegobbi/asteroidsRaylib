@@ -4,6 +4,7 @@
 
 #include "asteroid.h"
 #include "constants.h"
+#include "particle.h"
 #include "projectile.h"
 #include "raylib.h"
 #include "spaceship.h"
@@ -13,6 +14,7 @@ spaceship_t sship;
 asteroid_t* asteroids;
 size_t n_asteroids_alive;
 unsigned int current_level;
+particle_t asteroid_particles[N_PARTICLES_ASTEROID];
 // size_t n_asteroids;
 //  #define QUADRATO_DEBUG  // TODO RIMUOVI QUANDO HAI FINITO
 
@@ -31,7 +33,7 @@ int main() {
     const int screenWidth = SCREEN_WIDTH;
     const int screenHeight = SCREEN_HEIGHT;
     InitWindow(screenWidth, screenHeight, "raylib");
-
+    
     asteroids = calloc(MAX_ASTEROIDS, sizeof(asteroid_t));
     if (asteroids == NULL) {
         return -1;
@@ -91,15 +93,23 @@ int main() {
 // Update and draw game frame
 static void UpdateDrawFrame(float delta_time) {
     // Update
+    
+
     queue_proj_t* proj = &sship.projectiles;
 
     update_spaceship(&sship, delta_time);
-    collision_projectiles_asteroids(asteroids, MAX_ASTEROIDS * current_level,
-                                    sship.projectiles.projectiles_arr, sship.projectiles.size_projectile_arr,
-                                    sship.projectiles.i_first_projectile, &n_asteroids_alive);
+    bool collision_happened = collision_projectiles_asteroids(
+        asteroids, MAX_ASTEROIDS * current_level, sship.projectiles.projectiles_arr,
+        sship.projectiles.size_projectile_arr, sship.projectiles.i_first_projectile, &n_asteroids_alive,
+        asteroid_particles, N_PARTICLES_ASTEROID);
 
     update_projectiles(proj, delta_time);
     update_asteroids(asteroids, MAX_ASTEROIDS * current_level, delta_time);
+    
+
+    
+
+    update_particles(asteroid_particles, N_PARTICLES_ASTEROID, delta_time);
     // Draw
     //----------------------------------------------------------------------------------
 
@@ -120,7 +130,11 @@ static void UpdateDrawFrame(float delta_time) {
              GREEN);
 
     DrawFPS(10, 10);
+
     draw_asteroids(asteroids, MAX_ASTEROIDS * current_level);
+    
+    draw_particles(asteroid_particles, N_PARTICLES_ASTEROID, GRAY);
+    
     EndDrawing();
     //----------------------------------------------------------------------------------
 }

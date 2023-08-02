@@ -19,6 +19,7 @@
 		"*.m": "c",
 		"asteroid.h": "c",
 		"algorithm": "c",
-		"stddef.h": "c"
+		"stddef.h": "c",
+		"random": "c"
 	}
 }
