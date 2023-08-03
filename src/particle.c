@@ -11,7 +11,18 @@ void generate_particles(particle_t particles[], size_t particles_len, Vector2 st
         float second_max_speed = sqrtf(PARTICLE_MAX_SPEED * PARTICLE_MAX_SPEED - pow(particle_vel.x, 2));
         particle_vel.y = (float)rand() / (float)(RAND_MAX / (2 * second_max_speed)) + -second_max_speed;
 
-        particles[i].vel = particle_vel;
+        if (GetRandomValue(0, 1)) {
+            particles[i].vel = particle_vel;
+        } else {
+            particles[i].vel.x = particle_vel.y;
+            particles[i].vel.y = particle_vel.x;
+        }
+
+        /*particles[i].vel.x=((float)rand() / (float)(RAND_MAX / (2 * PARTICLE_MAX_SPEED)) +
+                         -PARTICLE_MAX_SPEED)/SQRT_OF_2;
+
+        particles[i].vel.y=((float)rand() / (float)(RAND_MAX / (2 * PARTICLE_MAX_SPEED)) +
+                         -PARTICLE_MAX_SPEED)/SQRT_OF_2;*/
         float r = (float)rand() /
                       (float)(RAND_MAX / (EXPLOSION_MAX_RADIUS_PERCENT - EXPLOSION_MIN_RADIUS_PERCENT)) +
                   EXPLOSION_MIN_RADIUS_PERCENT;
