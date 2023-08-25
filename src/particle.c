@@ -37,6 +37,7 @@ void update_particles(particle_t particles[], size_t particles_len, float delta_
         particles[i].pos.y += particles[i].vel.y * delta_time;
     }
 }
+
 void draw_particles(particle_t particles[], size_t particles_len, Color c) {
     for (size_t i = 0; i < particles_len; i++) {
         if (particles[i].distance_to_live > 0) {

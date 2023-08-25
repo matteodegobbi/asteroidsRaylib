@@ -123,7 +123,7 @@ static void UpdateDrawFrame(float delta_time) {
     // DrawText(TextFormat("Angolo:%f", sship.angle), 10, 60, 20, DARKGRAY);
     //  DrawText(TextFormat("Vettore:%f,%f", sship.vel.x, sship.vel.y), 10, 80, 20, DARKGRAY);
     // DrawText(TextFormat("Vettore:%f,%f", sship.pos.x, sship.pos.y), 10, 80, 20, DARKGRAY);
-    DrawText(TextFormat("Number of asteroids:%d", n_asteroids_alive), 10, 100, 20, DARKGRAY);
+    DrawText(TextFormat("Number of asteroids:%d", n_asteroids_alive), 10, 100, 20, RED);
     char* level_string = TextFormat("Level %d", current_level);
     const int level_font = 60;
     DrawText(level_string, SCREEN_WIDTH / 2 - MeasureText(level_string, level_font) / 2, 20, level_font,
