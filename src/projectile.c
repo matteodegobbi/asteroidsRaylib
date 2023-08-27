@@ -7,6 +7,7 @@
 
 #include "spaceship.h"
 void update_projectiles(queue_proj_t* queue, float delta_time) {
+    //float cancellami = delta_time*2; 
     size_t first = queue->i_first_projectile;
     size_t size = queue->size_projectile_arr;
     for (size_t i = first; i < first + size; i++) {
