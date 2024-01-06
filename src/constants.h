@@ -27,6 +27,7 @@
 //------------Asteroids------------
 //---------------------------------
 #define N_SCALES_ASTEROID 3  // NEEDS TO BE CHANGED IF THE NEXT DEFINE IS CHANGED
+#define ASTEROID_HITBOX_BASE_RADIUS 11.0f 
 typedef enum {
     SMALL = 3,
     MEDIUM = 6,

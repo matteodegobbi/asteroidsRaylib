@@ -4,6 +4,7 @@
 #include <math.h>
 #include <stdio.h>
 
+#include "asteroid.h"
 #include "constants.h"
 #include "projectile.h"
 #include "raylib.h"
@@ -25,8 +26,12 @@ void init_spaceship(spaceship_t* sship) {
         sship->projectiles.projectiles_arr[i].flag = FLAG_UNINITIALIZED;
     }
 }
-void update_spaceship(spaceship_t* sship, float delta_time) {
+void update_spaceship(spaceship_t* sship, float delta_time,asteroid_t* asteroids) {
     //---------------------------------------------------------------------------------------------
+    //COLLISION WITH ASTEROIDS
+    if (!sship->invincible) {
+             
+    }
     // KEYBOARD AND MOUSE
     if (IsKeyDown(KEY_A)) {
         double delta_angle = delta_time * SPACESHIP_ANGULAR_SPEED;

@@ -1,6 +1,7 @@
 #pragma once
 #include "raylib.h"
 #include "projectile.h"
+#include "asteroid.h"
 #include "constants.h"
 
 #include <stddef.h>
@@ -15,7 +16,7 @@ typedef struct spaceship_t {
     bool invincible;
 } spaceship_t;
 void init_spaceship(spaceship_t* sship);
-void update_spaceship(spaceship_t* sship,float delta_time);
+void update_spaceship(spaceship_t* sship,float delta_time,asteroid_t* asteroids);
 void draw_spaceship(spaceship_t* sship);
 void shoot_projectile(spaceship_t* sship);
 void unshoot_oldest_projectile(spaceship_t* sship);

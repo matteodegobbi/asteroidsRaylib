@@ -7,10 +7,20 @@
 #include "raylib.h"
 #include "raymath.h"
 
+
+
+//IF YOU CHANGE THIS RECOMPUTES BARICENTERS, no comptime in C :(
 const Vector2 asteroid_shapes[3][ASTEROID_N_SIDES] = {
     {{-10, -10}, {0, -16}, {+10, -12}, {+6, 0}, {+8, +9}, {+1, +5}, {-9, +9}, {-15, 0}},
     {{-5, -3}, {0, -10}, {+6, -5}, {+6, 0}, {+8, 5}, {+1, +5}, {-3, +2}, {-10, 0}},
     {{-10, -6}, {0, -20}, {+12, -10}, {+12, 0}, {+16, 10}, {+2, +10}, {-6, +4}, {-20, 0}}};
+
+const Vector2 asteroid_baricenters[3] = {
+    {-1.125,-1.875},
+    {0.375,-0.75},
+    {0.75,-1.5}
+};
+
 
 asteroid_scale int2scale(int i) {
     switch (i) {
@@ -62,6 +72,7 @@ void init_rand_asteroid_scale_pos(asteroid_t* ast, asteroid_scale scale, Vector2
 }
 
 void update_asteroid(asteroid_t* ast, float delta_time) {
+    return;
     if (ast->flag != ASTFLAG_ALIVE) {
         return;
     }
@@ -157,7 +168,10 @@ void draw_asteroid(asteroid_t* ast) {
     float center_y = ast->pos.y;
     int shape = ast->shape_type;
     float angle = ast->angle;
-    // DrawCircle(center_x, center_y, 5, RED);
+    DrawCircle(center_x, center_y, 5, RED);
+    Vector2 current_baricenter = Vector2Add(ast->pos, asteroid_baricenters[shape]);
+    DrawCircle(current_baricenter.x,current_baricenter.y, ASTEROID_HITBOX_BASE_RADIUS*scale, GREEN);
+
     Vector2 currentVec = Vector2Rotate(asteroid_shapes[shape][0], angle);
     for (size_t i = 0; i < ASTEROID_N_SIDES; i++) {
         Vector2 nextVec = Vector2Rotate(asteroid_shapes[shape][(i + 1) % ASTEROID_N_SIDES], angle);

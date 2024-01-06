@@ -97,7 +97,7 @@ static void UpdateDrawFrame(float delta_time) {
 
     queue_proj_t* proj = &sship.projectiles;
 
-    update_spaceship(&sship, delta_time);
+    update_spaceship(&sship, delta_time,asteroids);
     bool collision_happened = collision_projectiles_asteroids(
         asteroids, MAX_ASTEROIDS * current_level, sship.projectiles.projectiles_arr,
         sship.projectiles.size_projectile_arr, sship.projectiles.i_first_projectile, &n_asteroids_alive,
