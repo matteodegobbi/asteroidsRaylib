@@ -120,6 +120,9 @@ void draw_spaceship(spaceship_t* sship) {
         DrawCircleV(sship->pos, sship->height * 1.2f, SKYBLUE);
     }
 
+    ////////////////// TODO remove, it's just for debugging purposes
+    DrawLine(sship->pos.x, sship->pos.y-SPACESHIP_HITBOX_OFFSET,sship->pos.x, sship->pos.y+SPACESHIP_HITBOX_OFFSET, BLUE);
+    ///////////////////////////
     Vector2 drawCenter = (Vector2){sship->width / 2, sship->height / 2};
     Rectangle source = (Rectangle){0, 0, sship->icon.width, sship->icon.height};
     Rectangle destination = (Rectangle){sship->pos.x, sship->pos.y, sship->width, sship->height};

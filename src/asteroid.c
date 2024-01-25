@@ -1,3 +1,4 @@
+#include "spaceship.h"
 #include "asteroid.h"
 #include "particle.h"
 
@@ -72,7 +73,7 @@ void init_rand_asteroid_scale_pos(asteroid_t* ast, asteroid_scale scale, Vector2
 }
 
 void update_asteroid(asteroid_t* ast, float delta_time) {
-    return;
+    //return;
     if (ast->flag != ASTFLAG_ALIVE) {
         return;
     }
@@ -97,6 +98,42 @@ void update_asteroid(asteroid_t* ast, float delta_time) {
     //---------------------------------------------------------------------------------------------
 }
 
+float ccw(Vector2 a,Vector2 b, Vector2 c){
+    return (c.y-a.y) * (b.x-a.x) > (b.y-a.y) * (c.x-a.x);
+}
+bool Vector2Intersect(Vector2 a,Vector2 b,Vector2 c, Vector2 d){
+    return ccw(a,c,d) != ccw(b,c,d) && ccw(a,b,c) != ccw(a,b,d);
+}
+bool collision_spaceship_asteroids(asteroid_t asts[], size_t len_ast,spaceship_t* sship){
+    Vector2 c= Vector2Add(sship->pos, (Vector2){.x=0,.y=SPACESHIP_HITBOX_OFFSET});
+    Vector2 d= Vector2Add(sship->pos, (Vector2){.x=0,.y=-SPACESHIP_HITBOX_OFFSET});
+    for (size_t i = 0; i < len_ast; i++) { 
+        if (asts[i].flag != ASTFLAG_ALIVE) {
+            continue;
+        }
+
+
+        float scale = asts[i].scale;
+        float center_x = asts[i].pos.x;
+        float center_y = asts[i].pos.y;
+        int shape = asts[i].shape_type;
+        float angle = asts[i].angle;
+        Vector2 currentVec = Vector2Scale(Vector2Rotate(asteroid_shapes[shape][0], angle),scale);
+        for (size_t i = 0; i < ASTEROID_N_SIDES; i++) {
+            Vector2 nextVec = Vector2Scale(Vector2Rotate(asteroid_shapes[shape][(i + 1) % ASTEROID_N_SIDES], angle),scale);
+            Vector2 currentVecPrime = (Vector2){.x=currentVec.x + center_x, .y=currentVec.y + center_y}; 
+            Vector2 nextVecPrime= (Vector2){.x=nextVec.x + center_x, .y=nextVec.y + center_y};
+            if (Vector2Intersect(currentVecPrime, nextVecPrime, c, d)) {
+//                printf("TRUE SCONTRTO\n");
+                return true; 
+            } 
+            //DrawLine(currentVecPrime.x,currentVecPrime.y, nextVecPrime.x,nextVecPrime.y, RED);
+//            DrawLine(currentVec.x + center_x, currentVec.y + center_y,nextVec.x + center_x, nextVec.y + center_y, RED);
+            currentVec = nextVec;
+        }
+    }
+    return false;
+}
 bool collision_projectiles_asteroids(asteroid_t asts[], size_t len_ast, projectile_t projs[], size_t n_proj,
                                      size_t i_first_proj, size_t* n_asteroids_alive_pt,particle_t particles[],size_t particles_len) {
     bool collision_happened = false;
@@ -170,8 +207,7 @@ void draw_asteroid(asteroid_t* ast) {
     float angle = ast->angle;
     DrawCircle(center_x, center_y, 5, RED);
     Vector2 current_baricenter = Vector2Add(ast->pos, asteroid_baricenters[shape]);
-    DrawCircle(current_baricenter.x,current_baricenter.y, ASTEROID_HITBOX_BASE_RADIUS*scale, GREEN);
-
+    //DrawCircle(current_baricenter.x,current_baricenter.y, ASTEROID_HITBOX_BASE_RADIUS*scale, GREEN);
     Vector2 currentVec = Vector2Rotate(asteroid_shapes[shape][0], angle);
     for (size_t i = 0; i < ASTEROID_N_SIDES; i++) {
         Vector2 nextVec = Vector2Rotate(asteroid_shapes[shape][(i + 1) % ASTEROID_N_SIDES], angle);
@@ -195,3 +231,30 @@ void draw_asteroids(asteroid_t asteroids[], size_t len) {
         draw_asteroid(&asteroids[i]);
     }
 }
+
+
+/* ADD TO draw_asteroid to draw scuffed hitboxes
+    int step_rectangle = ASTEROID_N_SIDES/4;
+    Vector2 vertices[4] = {0};
+    for (size_t index = 0,i = 0; index < ASTEROID_N_SIDES; index+=step_rectangle,i++) {
+        Vector2 temp = Vector2Add(Vector2Rotate(Vector2Scale(asteroid_shapes[shape][index],scale),angle),ast->pos); 
+        vertices[i]= temp;
+    }
+    for (size_t i = 0; i < 4; i++) {
+        printf("%lu\n",i);
+        printf("%f\n",vertices[i].x);
+        printf("%f\n",vertices[i].y);
+        DrawLineV(vertices[i], vertices[(i+1)%4], RED);
+    }
+
+
+
+
+
+
+
+
+
+
+
+*/

@@ -1,5 +1,19 @@
 # asteroidsRaylib
 
+1. CHECK WHY COLLISION ASTEROID SPACESHIP WORKS
+2. STUFF GETS RECOMPUTED MULTIPLE TIMES 
+3. CHANGE SPACESHIP HITBOX FROM LINE TO TRIANGLE
+
+
+
+
+
+
+
+
+
+
+
 ## Stuff to implement
 0. ~~Don't draw already hit projectiles with if guard clause in draw func~~
 1. Charge bar for projectile burst every n seconds

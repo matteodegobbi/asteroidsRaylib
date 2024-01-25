@@ -2,13 +2,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
 #include "asteroid.h"
 #include "constants.h"
 #include "particle.h"
 #include "projectile.h"
 #include "raylib.h"
 #include "spaceship.h"
-
+#include <assert.h>
 spaceship_t sship;
 // asteroid_t asteroids[MAX_ASTEROIDS];//TODO forse fai con realloc
 asteroid_t* asteroids;
@@ -103,6 +104,8 @@ static void UpdateDrawFrame(float delta_time) {
         sship.projectiles.size_projectile_arr, sship.projectiles.i_first_projectile, &n_asteroids_alive,
         asteroid_particles, N_PARTICLES_ASTEROID);
 
+    bool spaceship_hit = collision_spaceship_asteroids(asteroids, MAX_ASTEROIDS*current_level, &sship);
+    //assert(!spaceship_hit);
     update_projectiles(proj, delta_time);
     update_asteroids(asteroids, MAX_ASTEROIDS * current_level, delta_time);
     
@@ -114,8 +117,9 @@ static void UpdateDrawFrame(float delta_time) {
     //----------------------------------------------------------------------------------
 
     BeginDrawing();
-    ClearBackground(RAYWHITE);
+    ClearBackground(spaceship_hit?RED:RAYWHITE);
 
+    //DrawCircle(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 100, spaceship_hit? RED:RAYWHITE);
     draw_spaceship(&sship);
     draw_projectiles(sship.projectiles.projectiles_arr, sship.projectiles.size_projectile_arr,
                      sship.projectiles.i_first_projectile);

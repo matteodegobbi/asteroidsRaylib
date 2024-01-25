@@ -1,12 +1,13 @@
 #pragma once
 
-#include "asteroid.h"
+#include "spaceship.h"
 #include "constants.h"
 #include "projectile.h"
 #include "particle.h"
 #include "raylib.h"
 #include "raymath.h"
 
+typedef struct spaceship_t  spaceship_t;
 typedef struct asteroid_t {
     Vector2 pos;
     Vector2 vel;
@@ -26,5 +27,6 @@ bool collision_projectiles_asteroids(asteroid_t asteroids[], size_t n_ast, proje
                                      particle_t particles[], size_t particles_len);
 void draw_asteroid(asteroid_t* ast);
 
+bool collision_spaceship_asteroids(asteroid_t asts[], size_t len_ast,spaceship_t* sship);
 void update_asteroids(asteroid_t asteroids[], size_t len, float delta_time);
 void draw_asteroids(asteroid_t asteroids[], size_t len);

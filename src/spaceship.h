@@ -5,6 +5,7 @@
 #include "constants.h"
 
 #include <stddef.h>
+typedef struct asteroid_t asteroid_t;
 typedef struct spaceship_t {
     Vector2 pos; /*Center of spaceship*/
     Vector2 vel;
