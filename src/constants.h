@@ -13,7 +13,7 @@
 #define SPACESHIP_ANGULAR_SPEED 210.0f
 #define SPACESHIP_DIREC_SPEED -500
 #define SECONDS_INVINCIBILITY 3
-#define SPACESHIP_HITBOX_OFFSET 75
+#define SPACESHIP_HITBOX_OFFSET 25 
 //---------------------------------
 //-----------Projectile------------
 //---------------------------------

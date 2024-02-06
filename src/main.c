@@ -16,6 +16,8 @@ asteroid_t* asteroids;
 size_t n_asteroids_alive;
 unsigned int current_level;
 particle_t asteroid_particles[N_PARTICLES_ASTEROID];
+bool developer_mode = false;
+
 // size_t n_asteroids;
 //  #define QUADRATO_DEBUG  // TODO RIMUOVI QUANDO HAI FINITO
 
@@ -95,7 +97,9 @@ int main() {
 static void UpdateDrawFrame(float delta_time) {
     // Update
     
-
+    if(IsKeyPressed(KEY_TAB)){
+        developer_mode = !developer_mode;
+    }
     queue_proj_t* proj = &sship.projectiles;
 
     update_spaceship(&sship, delta_time,asteroids);
@@ -133,8 +137,10 @@ static void UpdateDrawFrame(float delta_time) {
     DrawText(level_string, SCREEN_WIDTH / 2 - MeasureText(level_string, level_font) / 2, 20, level_font,
              GREEN);
 
-    DrawFPS(10, 10);
-
+    if(developer_mode){
+        DrawText("Developer-Mode", SCREEN_WIDTH / 2 - MeasureText("Developer-Mode", level_font) / 2, 60, level_font,RED);
+        DrawFPS(10, 10);
+    }
     draw_asteroids(asteroids, MAX_ASTEROIDS * current_level);
     
     draw_particles(asteroid_particles, N_PARTICLES_ASTEROID, GRAY);

@@ -105,8 +105,9 @@ bool Vector2Intersect(Vector2 a,Vector2 b,Vector2 c, Vector2 d){
     return ccw(a,c,d) != ccw(b,c,d) && ccw(a,b,c) != ccw(a,b,d);
 }
 bool collision_spaceship_asteroids(asteroid_t asts[], size_t len_ast,spaceship_t* sship){
-    Vector2 c= Vector2Add(sship->pos, (Vector2){.x=0,.y=SPACESHIP_HITBOX_OFFSET});
-    Vector2 d= Vector2Add(sship->pos, (Vector2){.x=0,.y=-SPACESHIP_HITBOX_OFFSET});
+    Vector2 c= Vector2Add(sship->pos, Vector2Rotate((Vector2){.x=0,.y=SPACESHIP_HITBOX_OFFSET},DEG2RAD*sship->angle));
+    Vector2 d= Vector2Add(sship->pos, Vector2Rotate((Vector2){.x=0,.y=-SPACESHIP_HITBOX_OFFSET},DEG2RAD*sship->angle));
+    //Vector2 d= Vector2Add(sship->pos, (Vector2){.x=0,.y=-SPACESHIP_HITBOX_OFFSET});
     for (size_t i = 0; i < len_ast; i++) { 
         if (asts[i].flag != ASTFLAG_ALIVE) {
             continue;

@@ -9,7 +9,7 @@
 #include "projectile.h"
 #include "raylib.h"
 #include "raymath.h"
-
+extern bool developer_mode;
 void init_spaceship(spaceship_t* sship) {
     sship->icon = LoadTexture("resources/spaceship.png");
     *sship =
@@ -53,14 +53,14 @@ void update_spaceship(spaceship_t* sship, float delta_time,asteroid_t* asteroids
         sship->pos = Vector2Subtract(sship->pos, Vector2Scale(sship->vel, delta_time));
     }
 
-    if (IsKeyPressed(KEY_SPACE) || IsMouseButtonDown(0)) { /*shoot*/
+    if (IsKeyPressed(KEY_SPACE) || (developer_mode && IsMouseButtonDown(0))) { /*shoot*/
         /*adds laser to array of entities to draw */
         shoot_projectile(sship);
     }
 
-    if (IsKeyDown(KEY_TAB)) { /*deshoot solo per il debug*/
+    /*if (IsKeyDown(KEY_CAPS_LOCK)) { //deshoot solo per il debug
         unshoot_oldest_projectile(sship);
-    }
+    }*/
     if (IsKeyPressed(KEY_HOME)) {
         // NOTHING
         printf("\n");
@@ -68,7 +68,7 @@ void update_spaceship(spaceship_t* sship, float delta_time,asteroid_t* asteroids
     //---------------------------------------------------------------------------------------------
     // GAMEPAD
     if (IsGamepadButtonPressed(GAMEPAD, GAMEPAD_BUTTON_RIGHT_FACE_DOWN) ||
-        IsGamepadButtonDown(GAMEPAD, GAMEPAD_BUTTON_RIGHT_FACE_RIGHT)) { /*shoot*/
+        (developer_mode && IsGamepadButtonDown(GAMEPAD, GAMEPAD_BUTTON_RIGHT_FACE_RIGHT))) { /*shoot*/
         /*adds laser to array of entities to draw */
         shoot_projectile(sship);
     }
@@ -121,7 +121,15 @@ void draw_spaceship(spaceship_t* sship) {
     }
 
     ////////////////// TODO remove, it's just for debugging purposes
-    DrawLine(sship->pos.x, sship->pos.y-SPACESHIP_HITBOX_OFFSET,sship->pos.x, sship->pos.y+SPACESHIP_HITBOX_OFFSET, BLUE);
+    //DrawLine(sship->pos.x, sship->pos.y-SPACESHIP_HITBOX_OFFSET,sship->pos.x, sship->pos.y+SPACESHIP_HITBOX_OFFSET, BLUE);
+    if(developer_mode){
+        Vector2 rotatedHitbox = Vector2Rotate((Vector2){.x=0,.y=SPACESHIP_HITBOX_OFFSET},DEG2RAD*sship->angle);
+        Vector2 startHitbox = Vector2Subtract(sship->pos,rotatedHitbox); 
+        Vector2 endHitbox =  Vector2Add(sship->pos,rotatedHitbox);
+        DrawCircleV(startHitbox, 10, BLACK);
+        DrawCircleV(endHitbox, 10, BLUE);
+        DrawLineV(startHitbox,endHitbox, BLUE);
+    }
     ///////////////////////////
     Vector2 drawCenter = (Vector2){sship->width / 2, sship->height / 2};
     Rectangle source = (Rectangle){0, 0, sship->icon.width, sship->icon.height};
